@@ -1,0 +1,38 @@
+{
+  "generator-ngx-rocket": {
+    "version": "8.0.1",
+    "props": {
+      "location": "path",
+      "strict": false,
+      "skipInstall": false,
+      "skipQuickstart": false,
+      "initGit": true,
+      "usePrefix": true,
+      "appName": "Just-fit",
+      "target": [
+        "web"
+      ],
+      "pwa": false,
+      "ui": "material",
+      "layout": "side-menu",
+      "auth": true,
+      "lazy": false,
+      "angulartics": false,
+      "languages": [
+        "en-US"
+      ],
+      "tools": [
+        "prettier",
+        "hads"
+      ],
+      "utility": [
+        "lodash"
+      ],
+      "deploy": "none",
+      "projectName": "just-fit",
+      "packageManager": "npm",
+      "mobile": [],
+      "desktop": []
+    }
+  }
+}
