@@ -14,6 +14,9 @@ import { ShellModule } from './shell/shell.module';
 import { AboutModule } from './about/about.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { PawelModule } from './pawel/pawel.module';
+import { RemekModule } from './remek/remek.module';
+
 
 @NgModule({
   imports: [
@@ -28,6 +31,8 @@ import { AppRoutingModule } from './app-routing.module';
     ShellModule,
     HomeModule,
     AboutModule,
+    PawelModule,
+    RemekModule,
     AuthModule,
     AppRoutingModule, // must be imported as the last module as it contains the fallback route
   ],

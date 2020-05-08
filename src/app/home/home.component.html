@@ -1,26 +1,33 @@
 <div class="container">
 
   <mat-tab-group>
-    <mat-tab label="All">
+    <mat-tab label="Cały sprzęt">
       <mat-card class="container__child">
         <mat-form-field>
-          <mat-label>By Name</mat-label>
+          <mat-label>Sortuj po nazwie</mat-label>
           <mat-select #fontSize [(value)]="byName" (selectionChange)="triggerName()" >
-            <mat-option *ngFor="let item of dataSourceIdPicker" value={{item.equipmentName}} ngDefaultControl>{{item.equipmentName}}</mat-option>
+            <ng-container *ngFor="let item of dataSourceIdPickerByName">
+             <!-- <mat-option *ngIf="item.availability===true" value={{item.equipmentName}} ngDefaultControl>{{item.equipmentName}}</mat-option> -->
+             <mat-option value={{item}} ngDefaultControl>{{item}}</mat-option>
+          </ng-container>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field>
-          <mat-label>By Classification</mat-label>
+          <mat-label>Sortuj po klasyfikacji</mat-label>
           <mat-select #fontSize [(value)]="byClassification" (selectionChange)="triggerClassification()" >
-            <mat-option *ngFor="let item of dataSourceIdPicker" value={{item.classification}} ngDefaultControl>{{item.classification}}</mat-option>
+            <ng-container *ngFor="let item of dataSourceIdPickerByClass">
+              <mat-option value={{item}} ngDefaultControl>{{item}}</mat-option>
+            </ng-container>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field>
-          <mat-label>By Specification</mat-label>
+          <mat-label>Sortuj po specyfikcji</mat-label>
           <mat-select #fontSize [(value)]="bySpecification" (selectionChange)="triggerSpecification()" >
-            <mat-option *ngFor="let item of dataSourceIdPicker" value={{item.specification}} ngDefaultControl>{{item.specification}}</mat-option>
+            <ng-container *ngFor="let item of dataSourceIdPickerBySpec">
+              <mat-option value={{item}} ngDefaultControl>{{item}}</mat-option>
+            </ng-container>
           </mat-select>
         </mat-form-field>
 
@@ -38,30 +45,30 @@
           </ng-container>
 
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <th mat-header-cell *matHeaderCellDef>Nazwa</th>
             <td mat-cell *matCellDef="let element"> {{element.equipmentName}} </td>
           </ng-container>
 
           <!-- Name Column -->
           <ng-container matColumnDef="classification">
-            <th mat-header-cell *matHeaderCellDef> Classification </th>
+            <th mat-header-cell *matHeaderCellDef>Klasyfikacja</th>
             <td mat-cell *matCellDef="let element"> {{element.classification}} </td>
           </ng-container>
 
           <!-- Weight Column -->
           <ng-container matColumnDef="specification">
-            <th mat-header-cell *matHeaderCellDef> Specification </th>
+            <th mat-header-cell *matHeaderCellDef>Specyfikacja</th>
             <td mat-cell *matCellDef="let element"> {{element.specification}} </td>
           </ng-container>
 
           <!-- Symbol Column -->
           <ng-container matColumnDef="broken">
-            <th mat-header-cell *matHeaderCellDef> Broken </th>
+            <th mat-header-cell *matHeaderCellDef>Czy zepsuty?</th>
             <td mat-cell *matCellDef="let element"> {{element.broken}} </td>
           </ng-container>
 
           <ng-container matColumnDef="availability">
-            <th mat-header-cell *matHeaderCellDef> Availability </th>
+            <th mat-header-cell *matHeaderCellDef>Dostępność</th>
             <td mat-cell *matCellDef="let element"> {{element.availability}} </td>
           </ng-container>
 
@@ -71,7 +78,7 @@
 
       </mat-card>
     </mat-tab>
-    <mat-tab label="All availabe">
+    <mat-tab label="Cały dostępny sprzęt">
       <mat-card class="container__child">
         <table mat-table [dataSource]="dataSource2" class="mat-elevation-z8">
 
@@ -86,30 +93,30 @@
           </ng-container>
 
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <th mat-header-cell *matHeaderCellDef>Nazwa</th>
             <td mat-cell *matCellDef="let element"> {{element.equipmentName}} </td>
           </ng-container>
 
           <!-- Name Column -->
           <ng-container matColumnDef="classification">
-            <th mat-header-cell *matHeaderCellDef> Classification </th>
+            <th mat-header-cell *matHeaderCellDef>Klasyfikacja</th>
             <td mat-cell *matCellDef="let element"> {{element.classification}} </td>
           </ng-container>
 
           <!-- Weight Column -->
           <ng-container matColumnDef="specification">
-            <th mat-header-cell *matHeaderCellDef> Specification </th>
+            <th mat-header-cell *matHeaderCellDef>Specyfikacja</th>
             <td mat-cell *matCellDef="let element"> {{element.specification}} </td>
           </ng-container>
 
           <!-- Symbol Column -->
           <ng-container matColumnDef="broken">
-            <th mat-header-cell *matHeaderCellDef> Broken </th>
+            <th mat-header-cell *matHeaderCellDef>Czy zepsuty?</th>
             <td mat-cell *matCellDef="let element"> {{element.broken}} </td>
           </ng-container>
 
           <ng-container matColumnDef="availability">
-            <th mat-header-cell *matHeaderCellDef> Availability </th>
+            <th mat-header-cell *matHeaderCellDef>Dostępność</th>
             <td mat-cell *matCellDef="let element"> {{element.availability}} </td>
           </ng-container>
 
@@ -119,10 +126,28 @@
 
       </mat-card>
     </mat-tab>
-    <mat-tab label="Third"> Content 3 </mat-tab>
+
+    <mat-tab label="Dodaj sprzęt"> 
+      
+     <mat-card class="addEq__dad">
+      <form (ngSubmit)="addEq()" [formGroup]="addForm" class="addEq" > 
+        <mat-form-field class="example-full-width">
+          <mat-label>Nazwa</mat-label>
+          <input matInput formControlName="equipmentName" required>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <mat-label>Klasyfikacja</mat-label>
+          <input matInput formControlName="classification" required>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <mat-label>Specyfikacja</mat-label>
+          <input matInput formControlName="specification" required>
+        </mat-form-field>
+        <button mat-raised-button [disabled]="addForm.invalid">Dodaj</button>
+      </form>
+     </mat-card>
+    
+    </mat-tab>
   </mat-tab-group>
-
-
-
 
 </div>
