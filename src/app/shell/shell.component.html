@@ -7,41 +7,24 @@
       [disableClose]="!isMobile"
       ngClass.gt-sm="has-border"
     >
-      <mat-toolbar color="primary">
+      <mat-toolbar>
         <span translate>APP_NAME</span>
-        <div fxFlex></div>
-        <div>
-          <button mat-icon-button [matMenuTriggerFor]="userMenu" translate>
-            <mat-icon>person</mat-icon>
-          </button>
-          <mat-menu #userMenu="matMenu">
-            <mat-list>
-              <mat-list-item>
-                <span translate>Logged in as</span>&nbsp;<b>{{ username }}</b>
-              </mat-list-item>
-              <mat-divider></mat-divider>
-            </mat-list>
-            <button mat-menu-item (click)="logout()" translate>Logout</button>
-          </mat-menu>
-        </div>
-        <app-language-selector icon="true"></app-language-selector>
       </mat-toolbar>
       <nav>
         <mat-list>
-          <mat-divider></mat-divider>
-          <a mat-list-item routerLink="/home" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+          <a mat-list-item routerLink="/equipment" routerLinkActive="active" (click)="isMobile && sidenav.close()">
             <span translate>Sprzęt</span>
           </a>
           <mat-divider></mat-divider>
-          <a mat-list-item routerLink="/about" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+          <a mat-list-item routerLink="/activities" routerLinkActive="active" (click)="isMobile && sidenav.close()">
             <span translate>Plan zajęć</span>
           </a>
           <mat-divider></mat-divider>
-          <a mat-list-item routerLink="/pawel" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+          <a mat-list-item routerLink="/worker" routerLinkActive="active" (click)="isMobile && sidenav.close()">
             <span translate>Pracownicy</span>
           </a>
           <mat-divider></mat-divider>
-          <a mat-list-item routerLink="/remek" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+          <a mat-list-item routerLink="/products" routerLinkActive="active" (click)="isMobile && sidenav.close()">
             <span translate>Produkty</span>
           </a>
           <mat-divider></mat-divider>
@@ -49,10 +32,7 @@
       </nav>
     </mat-sidenav>
     <mat-sidenav-content>
-      <mat-toolbar color="primary" class="mat-elevation-z6">
-        <button class="menu-button" mat-icon-button (click)="sidenav.toggle()" fxHide.gt-sm>
-          <mat-icon>menu</mat-icon>
-        </button>
+      <mat-toolbar class="mat-elevation-z6">
         <span>{{ title }}</span>
       </mat-toolbar>
       <router-outlet></router-outlet>

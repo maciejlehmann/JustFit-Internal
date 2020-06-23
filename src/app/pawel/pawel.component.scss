@@ -1,0 +1,27 @@
+.container {
+  text-align: center;
+  padding: 1rem;
+}
+
+.mat-icon {
+  vertical-align: middle;
+}
+
+table {
+  width: 90%;
+}
+
+table th {
+  text-align: center;
+}
+
+.addWorker__dad {
+  // display: flex;
+  margin: auto;
+  width: 60%;
+}
+
+.addWorker {
+  display: flex;
+  flex-direction: column;
+}

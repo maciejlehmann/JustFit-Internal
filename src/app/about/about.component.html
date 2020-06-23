@@ -1,50 +1,115 @@
 <div class="container">
   <mat-card>
     <mat-tab-group>
-      <mat-tab label="All Activity Kinds">
-      <mat-card-content>
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <mat-tab label="Wszystkie zajęcia">
+        <mat-card-content>
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-        <!--- Note that these columns can be defined in any order.
-        The actual rendered columns are set as a property on the row definition" -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>Id</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.classCanceled ? '#8a8a8a75' : '#ffffff'}"> {{element.id}} </td>
+            </ng-container>
 
-        <!-- Position Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Nazwa</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.classCanceled ? '#8a8a8a75' : '#ffffff'}"> {{element.name}} </td>
+            </ng-container>
 
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>Id</th>
-          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-        </ng-container>
+            <ng-container matColumnDef="leader">
+              <th mat-header-cell *matHeaderCellDef>Prowadzący</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.classCanceled ? '#8a8a8a75' : '#ffffff'}"> {{element.leader}} </td>
+            </ng-container>
 
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Name</th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-        </ng-container>
+            <ng-container matColumnDef="activityType">
+              <th mat-header-cell *matHeaderCellDef>Rodzaj zajęć</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.classCanceled ? '#8a8a8a75' : '#ffffff'}"> {{element.activityType}} </td>
+            </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-    </mat-card-content>
-    </mat-tab>
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Data</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.classCanceled ? '#8a8a8a75' : '#ffffff'}"> {{element.date}} </td>
+            </ng-container>
 
-    <mat-tab label="All Activity Types">
-      <mat-card-content>
-      <table mat-table [dataSource]="dataSource2" class="mat-elevation-z8">
+            <ng-container matColumnDef="hourStart">
+              <th mat-header-cell *matHeaderCellDef>Godzina rozpoczęcia</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.classCanceled ? '#8a8a8a75' : '#ffffff'}"> {{element.hourStart}} </td>
+            </ng-container>
 
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>Id</th>
-          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-        </ng-container>
+            <ng-container matColumnDef="hourEnd">
+              <th mat-header-cell *matHeaderCellDef>Godzina zakończenia</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.classCanceled ? '#8a8a8a75' : '#ffffff'}"> {{element.hourEnd}} </td>
+            </ng-container>
 
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Name</th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-        </ng-container>
+            <ng-container matColumnDef="equipmentUsed">
+              <th mat-header-cell *matHeaderCellDef>Sprzęt</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.classCanceled ? '#8a8a8a75' : '#ffffff'}">
+                <div *ngFor="let item of element.equipmentUsed">{{item.equipmentName}}</div>
+              </td>
+            </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-    </mat-card-content>
-    </mat-tab>
-  </mat-tab-group>
+            <ng-container matColumnDef="classCanceled">
+              <th mat-header-cell *matHeaderCellDef>Czy odwołane?</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.classCanceled ? '#8a8a8a75' : '#ffffff'}">
+                <span *ngIf="element.classCanceled" class="material-icons">check</span>
+                <span *ngIf="!element.classCanceled" class="material-icons">close</span>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </mat-card-content>
+      </mat-tab>
+
+      <mat-tab label="Dodaj zajęcia">
+        <mat-card class="addAct__dad">
+          <form (ngSubmit)="addActivity()" [formGroup]="addForm" class="addAct" >
+
+            <mat-form-field class="example-full-width">
+              <mat-label>Nazwa</mat-label>
+              <input matInput formControlName="name" required>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <mat-label>Prowadzący</mat-label>
+              <input matInput formControlName="leader" required>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Specjalizacja</mat-label>
+              <mat-select formControlName="activityType" required>
+                <mat-option *ngFor="let item of activities" [value]="item.name">{{item.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <mat-label>Data</mat-label>
+              <input matInput formControlName="date" required>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <mat-label>Godzina rozpoczęcia</mat-label>
+              <input matInput formControlName="hourStart" required>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <mat-label>Godzina zakończenia</mat-label>
+              <input matInput formControlName="hourEnd" required>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Sprzęt</mat-label>
+              <mat-select formControlName="equipmentUsed" required>
+                <mat-option *ngFor="let item of equipment" [value]="item">
+                  {{item.equipmentName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <button mat-raised-button [disabled]="addForm.invalid">Dodaj</button>
+          </form>
+        </mat-card>
+      </mat-tab>
+    </mat-tab-group>
   </mat-card>
 </div>

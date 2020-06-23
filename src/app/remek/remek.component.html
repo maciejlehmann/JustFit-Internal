@@ -1,62 +1,97 @@
 <div class="container">
+  <mat-card>
     <mat-tab-group>
-        <mat-tab label="Wszystkie produkty">
-            <mat-card class="container__child">
-                <mat-form-field>
-                    <mat-label>Sortuj po id</mat-label>
-                    <mat-select #fontSize [(value)]="byId" (selectionChange)="triggerId()" >
-                        <ng-container *ngFor="let item of dataSourceIdPickerByName">
-                            <mat-option value={{item}} ngDefaultControl>{{item}}</mat-option>
-                        </ng-container>
-                    </mat-select>
-                </mat-form-field>
+      <mat-tab label="Wszystkie produkty">
+        <mat-card class="container__child">
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>Id</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': !element.active ? '#8a8a8a75' : '#ffffff'}"> {{element.id}} </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="id">
-                        <th mat-header-cell *matHeaderCellDef>Id</th>
-                        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-                    </ng-container>
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Nazwa</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': !element.active ? '#8a8a8a75' : '#ffffff'}"> {{element.name}} </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef>Nazwa</th>
-                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                    </ng-container>
+            <ng-container matColumnDef="durationInMonths">
+              <th mat-header-cell *matHeaderCellDef>Czas trwania</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': !element.active ? '#8a8a8a75' : '#ffffff'}"> {{element.durationInMonths}} </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="durationInMonths">
-                        <th mat-header-cell *matHeaderCellDef>Czas trwania</th>
-                        <td mat-cell *matCellDef="let element"> {{element.durationInMonths}} </td>
-                    </ng-container>
+            <ng-container matColumnDef="contract">
+              <th mat-header-cell *matHeaderCellDef>Umowa</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': !element.active ? '#8a8a8a75' : '#ffffff'}">
+                <span *ngIf="element.contract" class="material-icons">check</span>
+                <span *ngIf="!element.contract" class="material-icons">close</span>
+              </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="contract">
-                        <th mat-header-cell *matHeaderCellDef>Kontrakt</th>
-                        <td mat-cell *matCellDef="let element"> {{element.contract}} </td>
-                    </ng-container>
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef>Opis</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': !element.active ? '#8a8a8a75' : '#ffffff'}"> {{element.description}} </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="description">
-                        <th mat-header-cell *matHeaderCellDef>Opis</th>
-                        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
-                    </ng-container>
+            <ng-container matColumnDef="price">
+              <th mat-header-cell *matHeaderCellDef>Cena</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': !element.active ? '#8a8a8a75' : '#ffffff'}"> {{element.price}} </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="price">
-                        <th mat-header-cell *matHeaderCellDef>Cena</th>
-                        <td mat-cell *matCellDef="let element"> {{element.price}} </td>
-                    </ng-container>
+            <ng-container matColumnDef="active">
+              <th mat-header-cell *matHeaderCellDef>Aktywność</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': !element.active ? '#8a8a8a75' : '#ffffff'}">
+                <button mat-raised-button (click)="changeActive(element.id)">
+                  <span *ngIf="element.active" class="material-icons">check</span>
+                  <span *ngIf="!element.active" class="material-icons">close</span>
+                </button>
+              </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="active">
-                        <th mat-header-cell *matHeaderCellDef>Aktywność</th>
-                        <td mat-cell *matCellDef="let element"> {{element.active}} </td>
-                    </ng-container>
+            <ng-container matColumnDef="avabileClasses">
+              <th mat-header-cell *matHeaderCellDef>Pakiet</th>
+              <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': !element.active ? '#8a8a8a75' : '#ffffff'}"> {{element.avabileClasses}} </td>
+            </ng-container>
 
-                    <ng-container matColumnDef="avabileClasses">
-                        <th mat-header-cell *matHeaderCellDef>Klasa</th>
-                        <td mat-cell *matCellDef="let element"> {{element.avabileClasses}} </td>
-                    </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </mat-card>
+      </mat-tab>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
-            </mat-card>
-        </mat-tab>
+      <mat-tab label="Dodaj produkt">
+        <mat-card class="addProd__dad">
+          <form (ngSubmit)="addProduct()" [formGroup]="addForm" class="addProd" >
+            <mat-form-field class="example-full-width">
+              <mat-label>Nazwa</mat-label>
+              <input matInput formControlName="name" required>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <mat-label>Okres (w miesiącach)</mat-label>
+              <input matInput formControlName="durationInMonths" required>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <mat-label>Umowa</mat-label>
+              <input matInput formControlName="contract" required>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <mat-label>Opis</mat-label>
+              <input matInput formControlName="description" required>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <mat-label>Cena</mat-label>
+              <input matInput formControlName="price" required>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Pakiet</mat-label>
+              <mat-select formControlName="avabileClasses" required>
+                <mat-option *ngFor="let item of arrClasses" [value]="item">{{item}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-raised-button [disabled]="addForm.invalid">Dodaj</button>
+          </form>
+        </mat-card>
+      </mat-tab>
     </mat-tab-group>
+  </mat-card>
 </div>

@@ -14,3 +14,14 @@ table {
 table th {
   text-align: center;
 }
+
+.addAct__dad {
+  // display: flex;
+  margin: auto;
+  width: 60%;
+}
+
+.addAct {
+  display: flex;
+  flex-direction: column;
+}

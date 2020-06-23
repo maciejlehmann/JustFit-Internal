@@ -2,21 +2,31 @@
     text-align: center;
     padding: 1em;
   }
-  
+
   .logo {
     width: 150px;
     margin: 0 auto;
   }
-  
+
   q {
     font-style: italic;
     quotes: "« " " »";
   }
-  
+
   table {
     width: 90%;
   }
-  
+
   table th {
     text-align: center;
+  }
+
+  .addProd__dad {
+    margin: auto;
+    width: 60%;
+  }
+
+  .addProd {
+    display: flex;
+    flex-direction: column;
   }

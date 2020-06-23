@@ -1,153 +1,154 @@
 <div class="container">
+  <mat-card>
+    <mat-tab-group>
+      <div class="mat">
+        <mat-tab label="Cały sprzęt">
+          <mat-card class="container__child">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-  <mat-tab-group>
-    <mat-tab label="Cały sprzęt">
-      <mat-card class="container__child">
-        <mat-form-field>
-          <mat-label>Sortuj po nazwie</mat-label>
-          <mat-select #fontSize [(value)]="byName" (selectionChange)="triggerName()" >
-            <ng-container *ngFor="let item of dataSourceIdPickerByName">
-             <!-- <mat-option *ngIf="item.availability===true" value={{item.equipmentName}} ngDefaultControl>{{item.equipmentName}}</mat-option> -->
-             <mat-option value={{item}} ngDefaultControl>{{item}}</mat-option>
-          </ng-container>
-          </mat-select>
-        </mat-form-field>
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef>Id</th>
+                <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.broken || !element.availability ? '#8a8a8a75' : '#FFFFFF'}"> {{element.id}} </td>
+              </ng-container>
 
-        <mat-form-field>
-          <mat-label>Sortuj po klasyfikacji</mat-label>
-          <mat-select #fontSize [(value)]="byClassification" (selectionChange)="triggerClassification()" >
-            <ng-container *ngFor="let item of dataSourceIdPickerByClass">
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Nazwa</th>
+                <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.broken || !element.availability ? '#8a8a8a75' : '#FFFFFF'}"> {{element.equipmentName}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="classification">
+                <th mat-header-cell *matHeaderCellDef>Klasyfikacja</th>
+                <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.broken || !element.availability ? '#8a8a8a75' : '#FFFFFF'}"> {{element.classification}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="specification">
+                <th mat-header-cell *matHeaderCellDef>Specyfikacja</th>
+                <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.broken || !element.availability ? '#8a8a8a75' : '#FFFFFF'}"> {{element.specification}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="broken">
+                <th mat-header-cell *matHeaderCellDef>Czy zepsuty?</th>
+                <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.broken || !element.availability ? '#8a8a8a75' : '#FFFFFF'}">
+                  <button mat-raised-button (click)="changeBroken(element)">
+                    <span *ngIf="element.broken" class="material-icons">check</span>
+                    <span *ngIf="!element.broken" class="material-icons">close</span>
+                  </button>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="availability">
+                <th mat-header-cell *matHeaderCellDef>Dostępność</th>
+                <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': element.broken || !element.availability ? '#8a8a8a75' : '#FFFFFF'}">
+                  <button mat-raised-button (click)="changeAvailability(element)">
+                    <span *ngIf="element.availability" class="material-icons">check</span>
+                    <span *ngIf="!element.availability" class="material-icons">close</span>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </mat-card>
+        </mat-tab>
+      </div>
+
+      <mat-tab label="Cały dostępny sprzęt">
+        <mat-card class="container__child">
+          <mat-form-field>
+            <mat-label>Wybierz po nazwie</mat-label>
+            <mat-select #fontSize [(value)]="byName" (selectionChange)="triggerName()" >
+              <ng-container *ngFor="let item of dataSourceIdPickerByName">
               <mat-option value={{item}} ngDefaultControl>{{item}}</mat-option>
             </ng-container>
-          </mat-select>
-        </mat-form-field>
+            </mat-select>
+          </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Sortuj po specyfikcji</mat-label>
-          <mat-select #fontSize [(value)]="bySpecification" (selectionChange)="triggerSpecification()" >
-            <ng-container *ngFor="let item of dataSourceIdPickerBySpec">
-              <mat-option value={{item}} ngDefaultControl>{{item}}</mat-option>
+          <mat-form-field>
+            <mat-label>Wybierz po klasyfikacji</mat-label>
+            <mat-select #fontSize [(value)]="byClassification" (selectionChange)="triggerClassification()" >
+              <ng-container *ngFor="let item of dataSourceIdPickerByClass">
+                <mat-option value={{item}} ngDefaultControl>{{item}}</mat-option>
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Wybierz po specyfikcji</mat-label>
+            <mat-select #fontSize [(value)]="bySpecification" (selectionChange)="triggerSpecification()" >
+              <ng-container *ngFor="let item of dataSourceIdPickerBySpec">
+                <mat-option value={{item}} ngDefaultControl>{{item}}</mat-option>
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
+
+          <table mat-table [dataSource]="dataSource2" class="mat-elevation-z8">
+            <ng-container matColumnDef="position">
+              <th mat-header-cell *matHeaderCellDef>Id</th>
+              <td mat-cell *matCellDef="let element"> {{element.id}} </td>
             </ng-container>
-          </mat-select>
-        </mat-form-field>
 
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Nazwa</th>
+              <td mat-cell *matCellDef="let element"> {{element.equipmentName}} </td>
+            </ng-container>
 
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <ng-container matColumnDef="classification">
+              <th mat-header-cell *matHeaderCellDef>Klasyfikacja</th>
+              <td mat-cell *matCellDef="let element"> {{element.classification}} </td>
+            </ng-container>
 
-          <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
+            <ng-container matColumnDef="specification">
+              <th mat-header-cell *matHeaderCellDef>Specyfikacja</th>
+              <td mat-cell *matCellDef="let element"> {{element.specification}} </td>
+            </ng-container>
 
-          <!-- Position Column -->
+            <ng-container matColumnDef="broken">
+              <th mat-header-cell *matHeaderCellDef>Czy zepsuty?</th>
+              <td mat-cell *matCellDef="let element">
+                <span *ngIf="element.broken" class="material-icons">check</span>
+                <span *ngIf="!element.broken" class="material-icons">close</span>
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="position">
-            <th mat-header-cell *matHeaderCellDef>Id</th>
-            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-          </ng-container>
+            <ng-container matColumnDef="availability">
+              <th mat-header-cell *matHeaderCellDef>Dostępność</th>
+              <td mat-cell *matCellDef="let element">
+                <span *ngIf="element.availability" class="material-icons">check</span>
+                <span *ngIf="!element.availability" class="material-icons">close</span>
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Nazwa</th>
-            <td mat-cell *matCellDef="let element"> {{element.equipmentName}} </td>
-          </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </mat-card>
+      </mat-tab>
 
-          <!-- Name Column -->
-          <ng-container matColumnDef="classification">
-            <th mat-header-cell *matHeaderCellDef>Klasyfikacja</th>
-            <td mat-cell *matCellDef="let element"> {{element.classification}} </td>
-          </ng-container>
+      <mat-tab label="Dodaj sprzęt">
+        <mat-card class="addEq__dad">
 
-          <!-- Weight Column -->
-          <ng-container matColumnDef="specification">
-            <th mat-header-cell *matHeaderCellDef>Specyfikacja</th>
-            <td mat-cell *matCellDef="let element"> {{element.specification}} </td>
-          </ng-container>
-
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="broken">
-            <th mat-header-cell *matHeaderCellDef>Czy zepsuty?</th>
-            <td mat-cell *matCellDef="let element"> {{element.broken}} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="availability">
-            <th mat-header-cell *matHeaderCellDef>Dostępność</th>
-            <td mat-cell *matCellDef="let element"> {{element.availability}} </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-
-      </mat-card>
-    </mat-tab>
-    <mat-tab label="Cały dostępny sprzęt">
-      <mat-card class="container__child">
-        <table mat-table [dataSource]="dataSource2" class="mat-elevation-z8">
-
-          <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
-
-          <!-- Position Column -->
-
-          <ng-container matColumnDef="position">
-            <th mat-header-cell *matHeaderCellDef>Id</th>
-            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Nazwa</th>
-            <td mat-cell *matCellDef="let element"> {{element.equipmentName}} </td>
-          </ng-container>
-
-          <!-- Name Column -->
-          <ng-container matColumnDef="classification">
-            <th mat-header-cell *matHeaderCellDef>Klasyfikacja</th>
-            <td mat-cell *matCellDef="let element"> {{element.classification}} </td>
-          </ng-container>
-
-          <!-- Weight Column -->
-          <ng-container matColumnDef="specification">
-            <th mat-header-cell *matHeaderCellDef>Specyfikacja</th>
-            <td mat-cell *matCellDef="let element"> {{element.specification}} </td>
-          </ng-container>
-
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="broken">
-            <th mat-header-cell *matHeaderCellDef>Czy zepsuty?</th>
-            <td mat-cell *matCellDef="let element"> {{element.broken}} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="availability">
-            <th mat-header-cell *matHeaderCellDef>Dostępność</th>
-            <td mat-cell *matCellDef="let element"> {{element.availability}} </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-
-      </mat-card>
-    </mat-tab>
-
-    <mat-tab label="Dodaj sprzęt"> 
-      
-     <mat-card class="addEq__dad">
-      <form (ngSubmit)="addEq()" [formGroup]="addForm" class="addEq" > 
-        <mat-form-field class="example-full-width">
-          <mat-label>Nazwa</mat-label>
-          <input matInput formControlName="equipmentName" required>
-        </mat-form-field>
-        <mat-form-field class="example-full-width">
-          <mat-label>Klasyfikacja</mat-label>
-          <input matInput formControlName="classification" required>
-        </mat-form-field>
-        <mat-form-field class="example-full-width">
-          <mat-label>Specyfikacja</mat-label>
-          <input matInput formControlName="specification" required>
-        </mat-form-field>
-        <button mat-raised-button [disabled]="addForm.invalid">Dodaj</button>
-      </form>
-     </mat-card>
-    
-    </mat-tab>
-  </mat-tab-group>
-
+          <form (ngSubmit)="addEq()" [formGroup]="addForm" class="addEq" >
+            <mat-form-field class="example-full-width">
+              <mat-label>Nazwa</mat-label>
+              <input matInput formControlName="equipmentName" required>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Klasyfikacja</mat-label>
+              <mat-select formControlName="classification" required>
+                <mat-option *ngFor="let classification of arrClassification" [value]="classification">{{classification}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <mat-label>Specyfikacja</mat-label>
+              <input matInput formControlName="specification" required>
+            </mat-form-field>
+            <button mat-raised-button [disabled]="addForm.invalid">Dodaj</button>
+          </form>
+        </mat-card>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
 </div>
+
+

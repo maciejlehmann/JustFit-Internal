@@ -7,8 +7,8 @@ import { extract } from '@app/i18n';
 
 const routes: Routes = [
   Shell.childRoutes([
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'remek', component: RemekComponent, data: { title: extract('Produkty') } },
+    { path: '', redirectTo: '/products', pathMatch: 'full' },
+    { path: 'products', component: RemekComponent, data: { title: extract('Produkty') } },
   ]),
 ];
 

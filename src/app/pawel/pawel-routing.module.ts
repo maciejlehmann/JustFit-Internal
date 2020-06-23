@@ -7,8 +7,8 @@ import { extract } from '@app/i18n';
 
 const routes: Routes = [
   Shell.childRoutes([
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'pawel', component: PawelComponent, data: { title: extract('Pracownicy') } },
+    { path: '', redirectTo: '/worker', pathMatch: 'full' },
+    { path: 'worker', component: PawelComponent, data: { title: extract('Pracownicy') } },
   ]),
 ];
 @NgModule({

@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 
 import { QuoteService } from './quote.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 export interface dataTable {
   id: number;
@@ -20,6 +21,7 @@ export interface dataTable {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
+
 export class HomeComponent implements OnInit {
   quote: string | undefined;
   isLoading = false;
@@ -28,8 +30,8 @@ export class HomeComponent implements OnInit {
   dataSourceIdPickerByClass: any;
   dataSourceIdPickerBySpec: any;
 
-  dataSource2:any
-  
+  dataSource2:MatTableDataSource<dataTable>;
+
   nameArr: any
   classArr: any
   specArr: any
@@ -43,41 +45,47 @@ export class HomeComponent implements OnInit {
 
   addForm!: FormGroup
 
+  arrClassification = ['PILKI', 'TRENINGSILOWY', 'LAWKIDOCWICZEN', 'KARDIO', 'MATY'];
+
   displayedColumns: string[] = ['position', 'name', 'classification', 'specification', 'broken', 'availability'];
 
-  constructor( private formBuilder: FormBuilder,private http: HttpClient) {
+  constructor( private formBuilder: FormBuilder, private http: HttpClient) {
     this.createForm()
   }
 
   triggerName() {
     console.log(this.byName);
     this.http.get(`http://justfitequipmentcatalog.herokuapp.com/justfit/equipment/getAllAvailableEquipmentByName?equipmentName=${this.byName}`).subscribe((data: any) => {
-      
-      this.dataSource = new MatTableDataSource(data);
-     
+      this.dataSource2 = new MatTableDataSource(data);
     })
   }
 
   triggerClassification() {
     console.log(this.byClassification);
     this.http.get(`http://justfitequipmentcatalog.herokuapp.com/justfit/equipment/getAllAvailableEquipmentByClassification?stClassification=${this.byClassification}`).subscribe((data: any) => {
-      this.dataSource = new MatTableDataSource(data);
-      console.log(this.dataSource)
+      this.dataSource2 = new MatTableDataSource(data);
     })
   }
 
   triggerSpecification() {
     console.log(this.bySpecification);
     this.http.get(`http://justfitequipmentcatalog.herokuapp.com/justfit/equipment/getAllAvailableEquipmentBySpecification?specification=${this.bySpecification}`).subscribe((data: any) => {
+      this.dataSource2 = new MatTableDataSource(data);
+    })
+  }
+
+  async init() {
+    this.http.get(`http://justfitequipmentcatalog.herokuapp.com/justfit/equipment/getAll`).subscribe( (data: any) => {
       this.dataSource = new MatTableDataSource(data);
-      console.log(this.dataSource)
     })
   }
 
   ngOnInit() {
-    this.http.get(`http://justfitequipmentcatalog.herokuapp.com/justfit/equipment/getAll`).subscribe( (data: any) => {
-      this.dataSource = new MatTableDataSource(data);
-      
+    this.init()
+
+    this.http.get(`http://justfitequipmentcatalog.herokuapp.com/justfit/equipment/getAllAvailable`).subscribe((data: any) => {
+      this.dataSource2 = new MatTableDataSource(data);
+
       const filterArr = data.filter( (item:any ) => item.availability === true)
       this.nameArr = filterArr.map((a:any) =>{
         return a.equipmentName
@@ -88,16 +96,11 @@ export class HomeComponent implements OnInit {
       this.classArr = filterArr.map((a:any) =>{
         return a.specification
       })
-  
+
 
       this.dataSourceIdPickerByName = new Set(this.nameArr);
       this.dataSourceIdPickerByClass = new Set(this.specArr);
       this.dataSourceIdPickerBySpec = new Set(this.classArr);
-
-    })
-
-    this.http.get(`http://justfitequipmentcatalog.herokuapp.com/justfit/equipment/getAllAvailable`).subscribe(data => {
-      this.dataSource2 = data
     })
   }
 
@@ -106,18 +109,24 @@ export class HomeComponent implements OnInit {
       equipmentName: new FormControl("", {validators: [Validators.required]}),
       classification: new FormControl("", {validators: [Validators.required]}),
       specification: new FormControl("", {validators: [Validators.required]}),
-      broken: new FormControl(true),
+      broken: new FormControl(false),
       availability: new FormControl(true)
     })
   }
 
   addEq() {
-    // let headers = new HttpHeaders({
-    //   'Content-Type': 'application/json'});
-    // let options = { headers: "Access-Control-Allow-Methods" };
-    // // let option = { headers: "Access-Control-Allow-Methods"}
+    this.http.post(`http://justfitequipmentcatalog.herokuapp.com/justfit/equipment`, this.addForm.value).subscribe()
+  }
 
-    // this.http.post(`http://justfitequipmentcatalog.herokuapp.com/justfit/equipment`, this.addForm.value, options).subscribe()
-    
+  changeAvailability(data?: any) {
+    const availability = !data.availability
+    this.http.patch(`https://justfitequipmentcatalog.herokuapp.com/justfit/equipment/changeAvailabilityList?availability=${availability}`, [data]).subscribe(() => this.init())
+  }
+
+  changeBroken(data?: any) {
+    const broken = !data.broken
+    console.log(broken);
+
+    this.http.patch(`https://justfitequipmentcatalog.herokuapp.com/justfit/equipment/changeBrokenStatus?broken=${broken}&id=${data.id}`, [data]).subscribe(() => this.init())
   }
 }
